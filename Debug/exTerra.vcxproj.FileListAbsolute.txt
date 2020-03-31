@@ -1,0 +1,2 @@
+G:\exTerra\exTerra\Debug\exTerra.exe
+G:\exTerra\exTerra\Debug\exTerra.pdb
