@@ -1,0 +1,4 @@
+*.dl.vvs
+/Debug
+/Release
+/.vs
