@@ -1,48 +1,28 @@
 ﻿  main.cpp
-G:\exTerra\exTerra\main.cpp(40,12): warning C4244: "argument": konwersja z "time_t" do "unsigned int", możliwa utrata danych
-G:\exTerra\exTerra\main.cpp(120,89): warning C4244: "argument": konwersja z "double" do "T", możliwa utrata danych
+c:\users\mateusz\desktop\exterra\main.cpp(566): warning C4244: "argument": konwersja z "time_t" do "unsigned int", możliwa utrata danych
+c:\users\mateusz\desktop\exterra\main.cpp(766): warning C4244: "argument": konwersja z "double" do "T", możliwa utrata danych
           with
           [
               T=float
           ]
-G:\exTerra\exTerra\main.cpp(120,59): warning C4244: "argument": konwersja z "double" do "T", możliwa utrata danych
+c:\users\mateusz\desktop\exterra\main.cpp(767): warning C4244: "argument": konwersja z "double" do "T", możliwa utrata danych
           with
           [
               T=float
           ]
-G:\exTerra\exTerra\main.cpp(121,103): warning C4244: "argument": konwersja z "double" do "T", możliwa utrata danych
+c:\users\mateusz\desktop\exterra\main.cpp(777): warning C4244: "argument": konwersja z "double" do "T", możliwa utrata danych
           with
           [
               T=float
           ]
-G:\exTerra\exTerra\main.cpp(121,67): warning C4244: "argument": konwersja z "double" do "T", możliwa utrata danych
-          with
-          [
-              T=float
-          ]
-G:\exTerra\exTerra\main.cpp(131,89): warning C4244: "argument": konwersja z "double" do "T", możliwa utrata danych
-          with
-          [
-              T=float
-          ]
-G:\exTerra\exTerra\main.cpp(131,59): warning C4244: "argument": konwersja z "double" do "T", możliwa utrata danych
-          with
-          [
-              T=float
-          ]
-G:\exTerra\exTerra\main.cpp(132,103): warning C4244: "argument": konwersja z "double" do "T", możliwa utrata danych
-          with
-          [
-              T=float
-          ]
-G:\exTerra\exTerra\main.cpp(132,67): warning C4244: "argument": konwersja z "double" do "T", możliwa utrata danych
+c:\users\mateusz\desktop\exterra\main.cpp(778): warning C4244: "argument": konwersja z "double" do "T", możliwa utrata danych
           with
           [
               T=float
           ]
   Trwa generowanie kodu
-  1 of 132 functions ( 0.8%) were compiled, the rest were copied from previous compilation.
+  1 of 232 functions ( 0.4%) were compiled, the rest were copied from previous compilation.
+  Zakończono generowanie kodu
     0 functions were new in current compilation
     0 functions had inline decision re-evaluated but remain unchanged
-  Zakończono generowanie kodu
-  exTerra.vcxproj -> G:\exTerra\exTerra\Release\exTerra.exe
+  exTerra.vcxproj -> C:\Users\Mateusz\Desktop\exTerra\Release\exTerra.exe

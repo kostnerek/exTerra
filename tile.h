@@ -9,31 +9,24 @@ using namespace sf;
 
 class tile
 {
-
-	
 	//RectangleShape tileShape;
-public:
+	public:
+		float width, height;
+		string type;
+		RectangleShape tileShape;
 
-	
+		tile( float blockWidth, float blockHeight, string type );
+		tile();
+		void loadTexture();
+		void setTexture();
+		void setColor();
 
-	float width, height;
-	string type;
-	RectangleShape tileShape;
-
-	tile(float blockWidth, float blockHeight, string type);
-	tile();
-	void loadTexture();
-	void setTexture();
-	void setColor();
-	
-
-	//dirt")		
-	//	grassDirt")  
-	//	ore1")		
-	//	ore2")		
-	//	ore3")		
-	//	ore4")		
-	//	stone")		
-
+		// dirt		
+		// grassDirt  
+		// ore1		
+		// ore2		
+		// ore3		
+		// ore4		
+		// stone		
 };
 
