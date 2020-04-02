@@ -20,10 +20,10 @@ public:
 	string type;
 	RectangleShape tileShape;
 
-	tile(float blockWidth, float blockHeight, string type);
+	tile(float blockWidth, float blockHeight);
 	tile();
 	void loadTexture();
-	void setTexture();
+	void setTexture(float widthT, float heightT);
 	void setColor();
 	
 

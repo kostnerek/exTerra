@@ -10,15 +10,14 @@ using namespace sf;
 tile::tile()
 { 
 	//this->loadTexture();
-	this->setTexture(); 
+	this->setTexture(this->height, this->width); 
 }
 
-tile::tile(float blockWidth, float blockHeight, string type)
+tile::tile(float blockWidth, float blockHeight):height(blockHeight), width(blockWidth)
 {
-	this->height = blockHeight;
-	this->width = blockWidth;
-	this->type = type;
-	this->setTexture();
+	//this->height = blockHeight;
+	//this->width = blockWidth;
+	this->setTexture(blockWidth, blockHeight);
 }
 
 void tile::loadTexture()
@@ -26,7 +25,7 @@ void tile::loadTexture()
 	
 }
 
-void tile::setTexture()
+void tile::setTexture(float widthT, float heightT)
 {
 	//cout << ".";
 	//cout << "Loading textures!" << endl;
@@ -37,7 +36,7 @@ void tile::setTexture()
 	//texture.loadFromMemory()
 
 	const sf::Texture* pTexture = &texture;
-	texture.create(10, 10);
+	texture.create(16,16);
 	this->tileShape.setTexture(pTexture);
 	
 
