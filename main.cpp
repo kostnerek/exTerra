@@ -5,19 +5,18 @@
 #include <time.h>
 #include <thread>
 #include <mutex>
+#include <math.h>
 
 #include "worldGenerate.h"
 #include "tile.h"
+#include "hero.h"
 
 using namespace sf;
 using namespace std;
 
 
-
-
-
 float g_height = 480;
-float g_width = 640;
+float g_width  = 640;
 
 bool gameLoad;
 
@@ -42,15 +41,15 @@ void loadingScreen()
 
 
 
-float blockWidth = 16.0;
+float blockWidth  = 16.0;
 float blockHeight = 16.0;
 
 int blockSize = 16;
 
-int worldWidth = 100;
+int worldWidth  = 100;
 int worldHeight = 100;
 
-
+float scale = 0.5;
 
 
 
@@ -60,22 +59,33 @@ int main()
 	world.showGenStats();
 
 
-	RenderWindow window(VideoMode(g_width, g_height), "exTerra");//100
+	RenderWindow window(VideoMode(g_width, g_height), "exTerra"); // 100
 
 	window.setFramerateLimit(60);
-	window.setVerticalSyncEnabled(true);
+	//window.setVerticalSyncEnabled(true);
 
 	View visibleArea(FloatRect(g_width/2, 0.f, g_width, g_height));
 
 
-	//=====================Test hero==============================
+	//=====================hero===================================
 
-		RectangleShape test;
+	hero heroCharacter;
+	heroCharacter.heroSprite.setPosition(g_width / 2, -1);
 
-		test.setFillColor(Color::Black);
-		test.setSize(Vector2f(20.f,20.f));
+
+	float heroDistanceOrigin = heroCharacter.heroSprite.getPosition().x;
+
+
+	RectangleShape test;
+	test.setFillColor(Color::Black);
+	test.setPosition(0, 0);
+	test.setSize(Vector2f(10, 10));
+
 
 	//============================================================
+
+
+
 
 
 	while (window.isOpen())
@@ -98,14 +108,21 @@ int main()
 
 			if (event.type == sf::Event::MouseWheelMoved)
 			{
+				
+				//int newSizeX = world.worldStructure[0][0].tileShape.getSize().x;// +scale;
+				//int newSizeY = world.worldStructure[0][0].tileShape.getSize().y;// +scale;
+				//
+				//int newPositionX = world.worldStructure[0][0].tileShape.getPosition().x;
+				//int newPositionY = world.worldStructure[0][0].tileShape.getPosition().y;
+				/*
 				if (event.mouseWheel.delta == 1)
 				{
 					for (int x = 0; x < worldWidth; x++)
 					{
 						for (int y = 0; y < worldHeight; y++)
 						{
-							world.worldStructure[x][y].tileShape.setSize(Vector2f(world.worldStructure[x][y].tileShape.getSize().x + 0.5, world.worldStructure[x][y].tileShape.getSize().y + 0.5));
-							world.worldStructure[x][y].tileShape.setPosition(Vector2f(world.worldStructure[x][y].tileShape.getPosition().x + 0.5*x, world.worldStructure[x][y].tileShape.getPosition().y + 0.5*y));
+							
+							world.worldStructure[x][y].tileShape.setPosition(Vector2f(world.worldStructure[x][y].tileShape.getPosition().x + 0.5 * x, world.worldStructure[x][y].tileShape.getPosition().y + 0.5 * y));
 						}
 					}
 				}
@@ -115,12 +132,59 @@ int main()
 					{
 						for (int y = 0; y < worldHeight; y++)
 						{
-							world.worldStructure[x][y].tileShape.setSize(Vector2f(world.worldStructure[x][y].tileShape.getSize().x - 0.5, world.worldStructure[x][y].tileShape.getSize().y - 0.5));
-							world.worldStructure[x][y].tileShape.setPosition(Vector2f(world.worldStructure[x][y].tileShape.getPosition().x - 0.5*x, world.worldStructure[x][y].tileShape.getPosition().y - 0.5*y));
+							
+							world.worldStructure[x][y].tileShape.setPosition(Vector2f(world.worldStructure[x][y].tileShape.getPosition().x - 0.5 * x, world.worldStructure[x][y].tileShape.getPosition().y - 0.5 * y));
 						}
 					}
 				}
+				*/
+				if (event.mouseWheel.delta == 1)
+				{
+					for (int x = 0; x < worldWidth; x++)
+					{
+						for (int y = 0; y < worldHeight; y++)
+						{
+							world.worldStructure[x][y].tileShape.setSize(Vector2f(world.worldStructure[x][y].tileShape.getSize().x + 0.5, world.worldStructure[x][y].tileShape.getSize().y + 0.5));
+							world.worldStructure[x][y].tileShape.setPosition(Vector2f(world.worldStructure[x][y].tileShape.getPosition().x + 0.5 * x, world.worldStructure[x][y].tileShape.getPosition().y + 0.5 * y));
+						}
 
+					}
+
+					scale = blockSize / world.worldStructure[0][0].tileShape.getSize().x;
+					cout << "Skala: " << scale << endl;
+					heroDistanceOrigin *= scale;
+					cout << "Odleglosc od punktu 0,0: " << heroDistanceOrigin<<endl;
+
+					heroCharacter.heroSprite.setPosition(Vector2f(/*heroCharacter.heroSprite.getPosition().x + 16 * scale*/heroDistanceOrigin, heroCharacter.heroSprite.getPosition().y));
+
+					heroCharacter.heroSprite.setSize(Vector2f(heroCharacter.heroSprite.getSize().x + 0.5, heroCharacter.heroSprite.getSize().y + 0.5));
+					scale = 1;
+
+				
+				}
+				if (event.mouseWheel.delta == -1)
+				{
+					for (int x = 0; x < worldWidth; x++)
+					{
+						for (int y = 0; y < worldHeight; y++)
+						{
+							world.worldStructure[x][y].tileShape.setSize(Vector2f(world.worldStructure[x][y].tileShape.getSize().x - 0.5, world.worldStructure[x][y].tileShape.getSize().y - 0.5));
+							world.worldStructure[x][y].tileShape.setPosition(Vector2f(world.worldStructure[x][y].tileShape.getPosition().x - 0.5 * x, world.worldStructure[x][y].tileShape.getPosition().y - 0.5 * y));
+						}
+					}
+
+
+					scale = blockSize / world.worldStructure[0][0].tileShape.getSize().x;
+					cout << "Skala: " << scale << endl;
+					heroDistanceOrigin *= scale;
+					cout << "Odleglosc od punktu 0,0: " << heroDistanceOrigin<<endl;
+
+					heroCharacter.heroSprite.setPosition(Vector2f(/*heroCharacter.heroSprite.getPosition().x - 16 * scale*/heroDistanceOrigin, heroCharacter.heroSprite.getPosition().y));
+
+					heroCharacter.heroSprite.setSize(Vector2f(heroCharacter.heroSprite.getSize().x - 0.5, heroCharacter.heroSprite.getSize().y - 0.5));
+					scale = 1;
+				}
+				
 			}
 		}
 
@@ -133,21 +197,21 @@ int main()
 		if (Keyboard::isKeyPressed(Keyboard::Up))
 		{
 			visibleArea.move(0, -5);
-			test.setPosition(currentView.getCenter().x, currentView.getCenter().y);
+			//test.setPosition(currentView.getCenter().x, currentView.getCenter().y);
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Down))
 		{
 			visibleArea.move(0, 5);
-			test.setPosition(currentView.getCenter().x, currentView.getCenter().y);
+			//test.setPosition(currentView.getCenter().x, currentView.getCenter().y);
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Right))
 		{
 			visibleArea.move(5, 0);
-			test.setPosition(currentView.getCenter().x, currentView.getCenter().y);
+			//test.setPosition(currentView.getCenter().x, currentView.getCenter().y);
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Left))
 		{
-			test.setPosition(currentView.getCenter().x, currentView.getCenter().y);
+			//test.setPosition(currentView.getCenter().x, currentView.getCenter().y);
 			visibleArea.move(-5, 0);
 		}
 
@@ -157,10 +221,10 @@ int main()
 			float fovY = currentView.getCenter().y;
 
 
-			float leftFovEdge = fovX - (g_width / 2);
-			float rightFovEdge = fovX + (g_width / 2);
-			float upFovEdge = fovY - (g_height / 2);
-			float downFovEdge = fovY + (g_height / 2);
+			float leftFovEdge  = fovX - (g_width  / 2);
+			float rightFovEdge = fovX + (g_width  / 2);
+			float upFovEdge    = fovY - (g_height / 2);
+			float downFovEdge  = fovY + (g_height / 2);
 
 			cout << "=============SCREEN EDGE COORDINATES=============\n";
 			cout << "fovX: " << fovX << endl;
@@ -178,10 +242,11 @@ int main()
 		float fovX = currentView.getCenter().x;
 		float fovY = currentView.getCenter().y;
 		
-		float leftFovEdge = fovX - (g_width / 2);
-		float rightFovEdge = fovX + (g_width / 2);
-		float upFovEdge = fovY + (g_height / 2);
-		float downFovEdge = fovY - (g_height / 2);
+		float leftFovEdge  = fovX - (g_width  / 2);
+		float rightFovEdge = fovX + (g_width  / 2);
+		float upFovEdge    = fovY + (g_height / 2);
+		float downFovEdge  = fovY - (g_height / 2);
+
 
 		for (int x = 0; x < worldWidth; x++)
 		{
@@ -190,7 +255,7 @@ int main()
 				float worldStructure_X = world.worldStructure[x][y].tileShape.getPosition().x;
 				float worldStructure_Y = world.worldStructure[x][y].tileShape.getPosition().y;
 				
-				if (worldStructure_X >=leftFovEdge-40 && worldStructure_X <=rightFovEdge && worldStructure_Y <=upFovEdge+40 && worldStructure_Y >=downFovEdge-40)
+				if (worldStructure_X >= leftFovEdge - 80 && worldStructure_X <= rightFovEdge && worldStructure_Y <= upFovEdge + 80 && worldStructure_Y >= downFovEdge - 80)
 				{
 					window.draw(world.worldStructure[x][y].tileShape);
 				}
@@ -201,7 +266,9 @@ int main()
 			}
 		}
 		
-		//window.draw(test);
+		window.draw(test);
+
+		window.draw(heroCharacter.heroSprite);
 		
 		window.display();
 	}
