@@ -4,7 +4,7 @@
 #include <vector>
 #include <time.h>
 #include <iostream>
-using namespace std; 
+using namespace std;
 using namespace sf;
 
 class hero
@@ -19,8 +19,7 @@ public:
 	const Texture* ptHeroTexture = &heroTexture;
 
 	hero();
-	
+
 	void loadTexture();
 	void heroMove();
 };
-

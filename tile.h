@@ -9,13 +9,8 @@ using namespace sf;
 
 class tile
 {
-
-	
 	//RectangleShape tileShape;
 public:
-
-	
-
 	float width, height;
 	string type;
 	RectangleShape tileShape;
@@ -25,15 +20,13 @@ public:
 	void loadTexture();
 	void setTexture(float widthT, float heightT);
 	void setColor();
-	
 
-	//dirt")		
-	//	grassDirt")  
-	//	ore1")		
-	//	ore2")		
-	//	ore3")		
-	//	ore4")		
-	//	stone")		
 
+	// dirt		
+	// grassDirt  
+	// ore1		
+	// ore2		
+	// ore3		
+	// ore4		
+	// stone
 };
-

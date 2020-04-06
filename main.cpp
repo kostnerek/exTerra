@@ -16,7 +16,7 @@ using namespace std;
 
 
 float g_height = 480;
-float g_width  = 640;
+float g_width = 640;
 
 bool gameLoad;
 
@@ -38,19 +38,15 @@ void loadingScreen()
 }
 
 
-
-
-
-float blockWidth  = 16.0;
+float blockWidth = 16.0;
 float blockHeight = 16.0;
 
 int blockSize = 16;
 
-int worldWidth  = 100;
+int worldWidth = 100;
 int worldHeight = 100;
 
 float scale = 0.5;
-
 
 
 int main()
@@ -64,7 +60,7 @@ int main()
 	window.setFramerateLimit(60);
 	//window.setVerticalSyncEnabled(true);
 
-	View visibleArea(FloatRect(g_width/2, 0.f, g_width, g_height));
+	View visibleArea(FloatRect(g_width / 2, 0.f, g_width, g_height));
 
 
 	//=====================hero===================================
@@ -108,12 +104,16 @@ int main()
 
 			if (event.type == sf::Event::MouseWheelMoved)
 			{
-				
-				//int newSizeX = world.worldStructure[0][0].tileShape.getSize().x;// +scale;
-				//int newSizeY = world.worldStructure[0][0].tileShape.getSize().y;// +scale;
-				//
-				//int newPositionX = world.worldStructure[0][0].tileShape.getPosition().x;
-				//int newPositionY = world.worldStructure[0][0].tileShape.getPosition().y;
+				float newSizeX = world.worldStructure[0][0].tileShape.getSize().x;
+				float newSizeY = world.worldStructure[0][0].tileShape.getSize().y;
+				//float newPositionX = world.worldStructure[0][0].tileShape.getPosition().x;
+				//float newPositionY = world.worldStructure[0][0].tileShape.getPosition().y;
+
+
+				float newPositionHeroX = heroCharacter.heroSprite.getPosition().x;
+				float newPositionHeroY = heroCharacter.heroSprite.getPosition().y;
+				float newSizeHeroX = heroCharacter.heroSprite.getSize().x;
+				float newSizeHeroY = heroCharacter.heroSprite.getSize().y;
 				/*
 				if (event.mouseWheel.delta == 1)
 				{
@@ -121,7 +121,6 @@ int main()
 					{
 						for (int y = 0; y < worldHeight; y++)
 						{
-							
 							world.worldStructure[x][y].tileShape.setPosition(Vector2f(world.worldStructure[x][y].tileShape.getPosition().x + 0.5 * x, world.worldStructure[x][y].tileShape.getPosition().y + 0.5 * y));
 						}
 					}
@@ -132,7 +131,6 @@ int main()
 					{
 						for (int y = 0; y < worldHeight; y++)
 						{
-							
 							world.worldStructure[x][y].tileShape.setPosition(Vector2f(world.worldStructure[x][y].tileShape.getPosition().x - 0.5 * x, world.worldStructure[x][y].tileShape.getPosition().y - 0.5 * y));
 						}
 					}
@@ -144,23 +142,18 @@ int main()
 					{
 						for (int y = 0; y < worldHeight; y++)
 						{
-							world.worldStructure[x][y].tileShape.setSize(Vector2f(world.worldStructure[x][y].tileShape.getSize().x + 0.5, world.worldStructure[x][y].tileShape.getSize().y + 0.5));
 							world.worldStructure[x][y].tileShape.setPosition(Vector2f(world.worldStructure[x][y].tileShape.getPosition().x + 0.5 * x, world.worldStructure[x][y].tileShape.getPosition().y + 0.5 * y));
+							world.worldStructure[x][y].tileShape.setSize(Vector2f(newSizeX + 0.5, newSizeY + 0.5));
 						}
-
 					}
 
 					scale = blockSize / world.worldStructure[0][0].tileShape.getSize().x;
 					cout << "Skala: " << scale << endl;
 					heroDistanceOrigin *= scale;
-					cout << "Odleglosc od punktu 0,0: " << heroDistanceOrigin<<endl;
+					cout << "Odleglosc od punktu 0,0: " << heroDistanceOrigin << endl;
 
-					heroCharacter.heroSprite.setPosition(Vector2f(/*heroCharacter.heroSprite.getPosition().x + 16 * scale*/heroDistanceOrigin, heroCharacter.heroSprite.getPosition().y));
-
-					heroCharacter.heroSprite.setSize(Vector2f(heroCharacter.heroSprite.getSize().x + 0.5, heroCharacter.heroSprite.getSize().y + 0.5));
-					scale = 1;
-
-				
+					heroCharacter.heroSprite.setPosition(Vector2f(newPositionHeroX + 10, newPositionHeroY + 0.5));
+					heroCharacter.heroSprite.setSize(Vector2f(newSizeHeroX + 0.5, newSizeHeroY + 0.5));
 				}
 				if (event.mouseWheel.delta == -1)
 				{
@@ -168,8 +161,8 @@ int main()
 					{
 						for (int y = 0; y < worldHeight; y++)
 						{
-							world.worldStructure[x][y].tileShape.setSize(Vector2f(world.worldStructure[x][y].tileShape.getSize().x - 0.5, world.worldStructure[x][y].tileShape.getSize().y - 0.5));
 							world.worldStructure[x][y].tileShape.setPosition(Vector2f(world.worldStructure[x][y].tileShape.getPosition().x - 0.5 * x, world.worldStructure[x][y].tileShape.getPosition().y - 0.5 * y));
+							world.worldStructure[x][y].tileShape.setSize(Vector2f(newSizeX - 0.5, newSizeY - 0.5));
 						}
 					}
 
@@ -177,14 +170,12 @@ int main()
 					scale = blockSize / world.worldStructure[0][0].tileShape.getSize().x;
 					cout << "Skala: " << scale << endl;
 					heroDistanceOrigin *= scale;
-					cout << "Odleglosc od punktu 0,0: " << heroDistanceOrigin<<endl;
+					cout << "Odleglosc od punktu 0,0: " << heroDistanceOrigin << endl;
 
-					heroCharacter.heroSprite.setPosition(Vector2f(/*heroCharacter.heroSprite.getPosition().x - 16 * scale*/heroDistanceOrigin, heroCharacter.heroSprite.getPosition().y));
-
-					heroCharacter.heroSprite.setSize(Vector2f(heroCharacter.heroSprite.getSize().x - 0.5, heroCharacter.heroSprite.getSize().y - 0.5));
-					scale = 1;
+					heroCharacter.heroSprite.setPosition(Vector2f(newPositionHeroX - 10, newPositionHeroY - 0.5));
+					heroCharacter.heroSprite.setSize(Vector2f(newSizeHeroX - 0.5, newSizeHeroY - 0.5));
 				}
-				
+
 			}
 		}
 
@@ -221,14 +212,14 @@ int main()
 			float fovY = currentView.getCenter().y;
 
 
-			float leftFovEdge  = fovX - (g_width  / 2);
-			float rightFovEdge = fovX + (g_width  / 2);
-			float upFovEdge    = fovY - (g_height / 2);
-			float downFovEdge  = fovY + (g_height / 2);
+			float leftFovEdge = fovX - (g_width / 2);
+			float rightFovEdge = fovX + (g_width / 2);
+			float upFovEdge = fovY - (g_height / 2);
+			float downFovEdge = fovY + (g_height / 2);
 
 			cout << "=============SCREEN EDGE COORDINATES=============\n";
 			cout << "fovX: " << fovX << endl;
-			cout << "fovY: " << fovY << endl<<endl;
+			cout << "fovY: " << fovY << endl << endl;
 			cout << "Left: " << leftFovEdge << endl;
 			cout << "Right: " << rightFovEdge << endl;
 			cout << "Up: " << upFovEdge << endl;
@@ -237,15 +228,15 @@ int main()
 		}
 
 		window.clear(Color::White);
-		
-		
+
+
 		float fovX = currentView.getCenter().x;
 		float fovY = currentView.getCenter().y;
-		
-		float leftFovEdge  = fovX - (g_width  / 2);
-		float rightFovEdge = fovX + (g_width  / 2);
-		float upFovEdge    = fovY + (g_height / 2);
-		float downFovEdge  = fovY - (g_height / 2);
+
+		float leftFovEdge = fovX - (g_width / 2);
+		float rightFovEdge = fovX + (g_width / 2);
+		float upFovEdge = fovY + (g_height / 2);
+		float downFovEdge = fovY - (g_height / 2);
 
 
 		for (int x = 0; x < worldWidth; x++)
@@ -254,7 +245,7 @@ int main()
 			{
 				float worldStructure_X = world.worldStructure[x][y].tileShape.getPosition().x;
 				float worldStructure_Y = world.worldStructure[x][y].tileShape.getPosition().y;
-				
+
 				if (worldStructure_X >= leftFovEdge - 80 && worldStructure_X <= rightFovEdge && worldStructure_Y <= upFovEdge + 80 && worldStructure_Y >= downFovEdge - 80)
 				{
 					window.draw(world.worldStructure[x][y].tileShape);
@@ -265,11 +256,11 @@ int main()
 				}
 			}
 		}
-		
+
 		window.draw(test);
 
 		window.draw(heroCharacter.heroSprite);
-		
+
 		window.display();
 	}
 
