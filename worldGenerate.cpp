@@ -9,7 +9,7 @@ using namespace std;
 using namespace sf;
 
 
-worldGenerate::worldGenerate(int worldWidth, int worldHeight, int blockSize):worldHeight(worldHeight), worldWidth(worldWidth), blockSize(blockSize)
+worldGenerate::worldGenerate(int worldWidth, int worldHeight, int blockSize) :worldHeight(worldHeight), worldWidth(worldWidth), blockSize(blockSize)
 {
 	this->blockAmount = worldHeight * worldWidth;
 	loadTextures();
@@ -55,8 +55,6 @@ void worldGenerate::generate()
 	{
 		for (int y = 1; y < this->worldHeight; y++)
 		{
-			
-
 			tile element(blockSize, blockSize);
 
 			int random = rand() % 100;
@@ -129,10 +127,8 @@ void worldGenerate::generate()
 
 		element.tileShape.setTexture(ptWhite);
 
-		element.tileShape.setPosition(x * blockSize, 0 );
+		element.tileShape.setPosition(x * blockSize, 0);
 		worldStructure[x][0] = element;
 	}
 	this->stopClock = clock();
-
-
 }
