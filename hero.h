@@ -34,29 +34,28 @@ public:
 		int amount=0;
 	};
 
-	RectangleShape heroSprite;
-
-	RectangleShape heroTest;
-
 
 	RectangleShape inventoryShape;
+	Texture inventoryTexture;
+	const Texture* ptInventoryTexture = &inventoryTexture;//cale inventory
+	Texture emptyTexture;
+	const Texture* ptEmptyTexture = &emptyTexture;
 
+
+	RectangleShape heroSprite;
 	Texture heroTexture;
 	Image heroImage;
 
 	const Texture* ptHeroTexture = &heroTexture;
 
-	Texture inventoryTexture;
-	const Texture* ptInventoryTexture = &inventoryTexture;//cale inventory
 
 	
-	Texture emptyTexture;
-	const Texture* ptEmptyTexture = &emptyTexture;
 
 	vector<vector<RectangleShape>>inventory;//inv
 	vector<vector<inventoryClass>>inventoryNumbers;//matematyczna czesc
 
 	Font font;
+	vector<vector<Text>>shownValues;
 
 
 	hero();
@@ -72,6 +71,9 @@ public:
 
 
 	void updateInvTextures();
+
+
+	void textSetup();
 	
 };
 

@@ -59,7 +59,9 @@ int main()
 	world.blockSize = blockSize;
 	world.worldWidth = worldWidth;
 	world.worldHeight = worldHeight;
+	world.placeBlocks();
 	world.showGenStats();
+	
 
 
 	RenderWindow window(VideoMode(g_width, g_height), "exTerra"); // 100
@@ -67,7 +69,7 @@ int main()
 	window.setFramerateLimit(60);
 	//window.setVerticalSyncEnabled(true);
 
-	View visibleArea(FloatRect(worldWidth*blockSize/2, -190.f, g_width, g_height));
+	View visibleArea(FloatRect(worldWidth*blockSize/2, 0.f, g_width, g_height));
 
 
 	//=====================hero===================================
@@ -89,8 +91,7 @@ int main()
 	//mousePoint.setPosition(mousePos);
 	
 
-	heroCharacter.heroSprite.setPosition(250, 250);
-	heroCharacter.heroTest.setPosition(250, 250);
+	heroCharacter.heroSprite.setPosition(250, 550);
 
 
 	int buffX = -1, buffY;
@@ -128,11 +129,7 @@ int main()
 						isInvOpen = true;
 					}
 				}
-				if (event.key.code == Keyboard::Z)
-				{
-					heroCharacter.inventoryNumbersSetup("dirt",  1);
-					heroCharacter.inventoryNumbersSetup("grass", 2);
-				}
+				
 
 
 				if (event.key.code == Keyboard::Q)
@@ -188,7 +185,7 @@ int main()
 				}
 			}
 
-			if (event.type == Event::MouseButtonReleased && isInvOpen == true)
+			if (event.type == Event::MouseButtonReleased && isInvOpen == true)//invectory operations
 			{
 				if (event.key.code == Mouse::Left)
 				{
@@ -202,9 +199,9 @@ int main()
 						{
 							if (heroCharacter.inventory[x][y].getGlobalBounds().intersects(mousePoint.getGlobalBounds()) == true)
 							{
-								cout << "Pressed(to znika)buff: " << buffX << " " << buffY << endl;
-
-								cout <<"Release(to nie znika)x: "<< x << " " << y << endl;
+								//cout << "Pressed(to znika)buff: " << buffX << " " << buffY << endl;
+								//
+								//cout <<"Release(to nie znika)x: "<< x << " " << y << endl;
 
 								string typeBuff = heroCharacter.inventoryNumbers[x][y].type;
 								int amountBuff = heroCharacter.inventoryNumbers[x][y].amount;
@@ -244,7 +241,7 @@ int main()
 			}
 
 
-			if (event.type == Event::MouseButtonPressed && isInvOpen==false)
+			if (event.type == Event::MouseButtonPressed && isInvOpen==false)//destroying
 			{
 				if (event.key.code == Mouse::Left)
 				{
@@ -266,7 +263,6 @@ int main()
 									if (abs(heroCharacter.heroSprite.getPosition().y - world.worldStructure[x][y].tileShape.getPosition().y) <= world.worldStructure[x][y].tileShape.getSize().y * 4)
 									{
 										world.deleteTile(x, y);
-										//world.worldStructure[x].erase(world.worldStructure[x].begin() + y);
 									}
 								}
 							}
@@ -274,12 +270,45 @@ int main()
 					}
 				}
 			}
-			//scroll
-			//=====VIEW=======================
-			
 
-			
-			//=====EO_VIEW====================
+
+
+			if (event.type == Event::MouseButtonPressed && isInvOpen != true)//placing blocks
+			{
+				if (event.key.code == Mouse::Right)
+				{
+					sf::Vector2i pixelPos = sf::Mouse::getPosition(window);
+					sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
+
+					mousePoint.setPosition(Vector2f(worldPos.x, worldPos.y));
+
+					mousePoint.setFillColor(Color::Black);
+					for (int x = 0; x < worldWidth; x++)
+					{
+						for (int y = 0; y < worldHeight; y++)
+						{
+							if (world.worldStructure[x][y].tileShape.getGlobalBounds().intersects(mousePoint.getGlobalBounds()) == true)
+							{
+								if (heroCharacter.inventoryNumbers[0][0].amount == 0)
+								{
+									heroCharacter.inventoryNumbers[0][0].type = "none";
+									break;
+								}
+								cout << x << " " << y << endl;
+								world.worldStructure[x][y].type = heroCharacter.inventoryNumbers[0][0].type;
+								heroCharacter.inventoryNumbers[0][0].amount--;
+								
+								
+							}
+						}
+					}
+				}
+			}
+
+
+
+
+			//scroll
 
 			if (event.type == sf::Event::MouseWheelMoved)
 			{
@@ -419,7 +448,6 @@ int main()
 		window.draw(mousePoint);
 
 		window.draw(heroCharacter.heroSprite);
-		window.draw(heroCharacter.heroTest);
 
 		if (isInvOpen == true)
 		{
@@ -429,13 +457,27 @@ int main()
 
 			
 			heroCharacter.inventorySetup();
+			heroCharacter.textSetup();
 			
 
 			for (int x = 0; x < 5; x++)
 			{
 				for (int y = 0; y < 4; y++)
 				{
+					
 					window.draw(heroCharacter.inventory[x][y]);
+					
+				}
+			}
+
+			for (int x = 0; x < 5; x++)
+			{
+				for (int y = 0; y < 4; y++)
+				{
+					
+					//cout << heroCharacter.shownValues[x][y].getPosition().x << " " << heroCharacter.shownValues[x][y].getPosition().y << endl;
+					window.draw(heroCharacter.shownValues[x][y]);
+					
 				}
 			}
 

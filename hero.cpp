@@ -23,30 +23,31 @@ hero::hero()
 	tStone.loadFromFile("textures/stoneInv.png");
 
 
+
+
+
 	heroSprite.setSize(Vector2f(16, 32));
 	heroSprite.setOrigin(Vector2f(8, 16));
 
-	heroTest.setSize(Vector2f(18, 34));
-	heroTest.setOrigin(Vector2f(9, 17));
 
 	heroImage.loadFromFile("textures/hero.png");
 	heroMove();
 
 
 	inventoryShape.setSize(Vector2f(560, 400));
-	//inventory.setFillColor(Color::Magenta);
 	inventoryTexture.loadFromFile("textures/inventory.png");
 	inventoryShape.setTexture(ptInventoryTexture);
 
-	//inventorySetup();
+
 	inventory.resize(5, vector<RectangleShape>(4));
 	inventoryNumbers.resize(5, vector<inventoryClass>(4));
 
 	emptyTexture.create(84, 84);
 
-	heroTest.setFillColor(Color::Magenta);
 
-	//font.loadFromFile(arial.ttf"")
+	font.loadFromFile("arial.ttf");
+	shownValues.resize(5, vector<Text>(4));
+	
 }
 
 
@@ -66,10 +67,7 @@ void hero::inventorySetup()
 		for (int y = 0; y < 4; y++)
 		{
 			invTile.setPosition(Vector2f(invX + (13 * x)+84*x+x, invY + (12.5 * y)+84*y));
-			
-			//invTile.setFillColor(Color::Transparent);
 			invTile.setTexture(ptEmptyTexture);
-
 			inventory[x][y] = invTile;
 		}
 	}
@@ -83,14 +81,6 @@ void hero::updateInvTextures()
 	{
 		for (int y = 0; y < 4; y++)
 		{
-			//if (inventoryNumbers[x][y].type == "dirt")
-			//{
-			//	inventory[x][y].setFillColor(Color::Blue);
-			//}
-			//if (inventoryNumbers[x][y].type == "grass")
-			//{
-			//	inventory[x][y].setFillColor(Color::Green);
-			//}
 			if (inventoryNumbers[x][y].type == "dirt") { inventory[x][y].setTexture(ptDirt); }
 			if (inventoryNumbers[x][y].type == "grass") { inventory[x][y].setTexture(ptGrass); }
 			if (inventoryNumbers[x][y].type == "stone") { inventory[x][y].setTexture(ptStone); }
@@ -101,26 +91,55 @@ void hero::updateInvTextures()
 		}
 		
 	}
-	
-	//
-	//if (inventoryNumbers[x][y].type == "none")
-	//{
-	//	invTile.setFillColor(Color::Transparent);
-	//}
 }
+
+void hero::textSetup()
+{
+
+	float invX = inventoryShape.getPosition().x + 12.5;
+	float invY = inventoryShape.getPosition().y + 12.5;
+	
+	for (int x = 0; x < 5; x++)
+	{
+		for (int y = 0; y < 4; y++)
+		{
+			Text textAmount;
+			textAmount.setFont(font);
+			textAmount.setCharacterSize(20);
+			
+			textAmount.setFillColor(Color::Black);
+
+			if (inventoryNumbers[x][y].amount != 0)
+			{
+				string value = to_string(inventoryNumbers[x][y].amount);
+
+
+				textAmount.setString(value);
+			}
+			else
+			{
+				textAmount.setString("");
+			}
+
+
+			
+
+			textAmount.setPosition(Vector2f(invX + (13 * x) + 84 * x + x, invY + (12.5 * y) + 84 * y));
+
+			shownValues[x][y] = textAmount;
+
+		}
+	}
+}
+
 
 
 void hero::inventoryNumbersSetup(string type, int amount, int x, int y)
 {
-	
-
 	inventoryClass element;
 	element.type = type;
 	element.amount = amount;
-
 	inventoryNumbers[x][y] = element;
-	//inventory[x][y].setTexture(ptInvTileTexture);
-
 }
 
 int hero::inventoryNumbersSetup(string type, int amount)
@@ -128,21 +147,21 @@ int hero::inventoryNumbersSetup(string type, int amount)
 	
 	inventoryClass element;
 	element.type = type;
-	element.amount = amount;
+	
 
 	if (amount == 0)
 	{
 		return 0;
 	}
-	//invTileTexture = world.tDirt;
-	//inventory[0][0].setTexture(ptInvTileTexture);
 
 	for (int x = 0; x < 5; x++)
 	{
 		for (int y = 0; y < 4; y++)
 		{
-			if (inventoryNumbers[x][y].amount == 0)
+			if (inventoryNumbers[x][y].amount == 0 || inventoryNumbers[x][y].type==type)
 			{
+
+				element.amount = amount+ inventoryNumbers[x][y].amount;
 				inventoryNumbers[x][y] = element;
 
 				return 0;
@@ -178,25 +197,21 @@ void hero::heroMove(short direction)
 		{
 
 			heroSprite.move(0,-5);
-			heroTest.move(0, -5);
 			break;
 		}
 		case 1://lewo
 		{
 			heroSprite.move(-5,0);
-			heroTest.move(-5, 0);
 			break;
 		}
 		case 2://prawo
 		{
 			heroSprite.move(5,0);
-			heroTest.move(5, 0);
 			break;
 		}
 		case 3://lewo
 		{
 			heroSprite.move(0,5);
-			heroTest.move(0, 5);
 			break;
 		}
 	}

@@ -43,7 +43,8 @@ class worldGenerate
 
 public:
 
-	
+	vector<vector<int>>worldStructureNums;
+
 	vector<vector<tile>>worldStructure;
 
 
@@ -52,11 +53,11 @@ public:
 
 	worldGenerate(int worldWidth, int worldHeight, int blockSize);
 
-	void loadTextures();
-
 	void showGenStats();
 
 	void generate();
+
+	void placeBlocks();
 
 	void deleteTile(int x, int y);
 };

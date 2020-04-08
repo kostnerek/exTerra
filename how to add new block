@@ -1,0 +1,11 @@
+dodawanie elementu:
+
+tekstura: mała i duża do inventory
+
+duza tekstura:
+plik [hero.h]  = deklararcja
+plik [hero.cpp]= zaladowanie elementu w konstruktorze, updateInvTextures() -> przypisanie wartości
+
+mała tekstura:
+plik [worldGenerate.h]  = deklararcja
+plik [worldGenerate.cpp]= zaladowanie elementu w konstruktorze, generate() -> przypisanie wartosci
