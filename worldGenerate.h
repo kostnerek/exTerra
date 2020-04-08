@@ -21,15 +21,16 @@ class worldGenerate
 	Texture tOre4;
 	Texture tStone;
 	Texture tWhite;
-
-	const Texture* ptDirt  = &tDirt;
+	const Texture* ptDirt = &tDirt;
 	const Texture* ptGrass = &tGrass;
-	const Texture* ptOre1  = &tOre1;
-	const Texture* ptOre2  = &tOre2;
-	const Texture* ptOre3  = &tOre3;
-	const Texture* ptOre4  = &tOre4;
+	const Texture* ptOre1 = &tOre1;
+	const Texture* ptOre2 = &tOre2;
+	const Texture* ptOre3 = &tOre3;
+	const Texture* ptOre4 = &tOre4;
 	const Texture* ptStone = &tStone;
 	const Texture* ptWhite = &tWhite;
+
+	
 
 
 	float dirtCount  = 0;
@@ -41,6 +42,8 @@ class worldGenerate
 	float ore4Count  = 0;
 
 public:
+
+	
 	vector<vector<tile>>worldStructure;
 
 
@@ -54,4 +57,8 @@ public:
 	void showGenStats();
 
 	void generate();
+
+	void deleteTile(int x, int y);
 };
+
+extern worldGenerate world;

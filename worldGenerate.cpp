@@ -5,9 +5,13 @@
 #include <time.h>
 #include <iostream>
 
+
+#include "hero.h"
+
 using namespace std;
 using namespace sf;
 
+worldGenerate world(100,100,16);
 
 worldGenerate::worldGenerate(int worldWidth, int worldHeight, int blockSize) :worldHeight(worldHeight), worldWidth(worldWidth), blockSize(blockSize)
 {
@@ -15,6 +19,8 @@ worldGenerate::worldGenerate(int worldWidth, int worldHeight, int blockSize) :wo
 	loadTextures();
 	generate();
 }
+
+
 
 void worldGenerate::loadTextures()
 {
@@ -51,9 +57,22 @@ void worldGenerate::generate()
 	srand(time(NULL));
 
 	this->startClock = clock();
+
+	for (int x = 1; x < worldWidth; x++)
+	{
+		for (int y = 1; y < 16; y++)
+		{
+			tile element(blockSize, blockSize);
+
+			element.type = "air";
+			element.tileShape.setFillColor(Color::Transparent);
+			worldStructure[x][y] = element;
+		}
+	}
+
 	for (int x = 1; x < this->worldWidth; x++)
 	{
-		for (int y = 1; y < this->worldHeight; y++)
+		for (int y = 16; y < this->worldHeight; y++)
 		{
 			tile element(blockSize, blockSize);
 
@@ -66,7 +85,6 @@ void worldGenerate::generate()
 
 				element.type = "dirt";
 				element.tileShape.setTexture(ptDirt);
-				//element.tileShape.setFillColor(Color::Blue);
 
 			}
 			if (random > 20 && random <= 70)
@@ -105,7 +123,7 @@ void worldGenerate::generate()
 				element.tileShape.setTexture(ptOre4);
 			}
 
-			if (y == 1)
+			if (y == 16)
 			{
 				grassCount++;
 
@@ -125,10 +143,20 @@ void worldGenerate::generate()
 		element.height = blockSize;
 		element.width = blockSize;
 
-		element.tileShape.setTexture(ptWhite);
+		element.tileShape.setFillColor(Color::Transparent);
 
 		element.tileShape.setPosition(x * blockSize, 0);
 		worldStructure[x][0] = element;
 	}
 	this->stopClock = clock();
+}
+
+
+
+void worldGenerate::deleteTile(int x, int y)
+{
+	worldStructure[x][y].tileShape.setFillColor(Color::Transparent);
+
+	
+
 }

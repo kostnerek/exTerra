@@ -29,4 +29,5 @@ public:
 	// ore3		
 	// ore4		
 	// stone
+
 };

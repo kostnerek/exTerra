@@ -55,7 +55,10 @@ bool isInvOpen = false;
 
 int main()
 {
-	worldGenerate world(worldWidth, worldHeight, blockSize);
+	//worldGenerate world(worldWidth, worldHeight, blockSize);
+	world.blockSize = blockSize;
+	world.worldWidth = worldWidth;
+	world.worldHeight = worldHeight;
 	world.showGenStats();
 
 
@@ -64,12 +67,11 @@ int main()
 	window.setFramerateLimit(60);
 	//window.setVerticalSyncEnabled(true);
 
-	View visibleArea(FloatRect(/*g_width / 2*/0.f, 0.f, g_width, g_height));
+	View visibleArea(FloatRect(worldWidth*blockSize/2, -190.f, g_width, g_height));
 
 
 	//=====================hero===================================
 
-	hero heroCharacter;
 
 
 	float heroDistanceOrigin = heroCharacter.heroSprite.getPosition().x;
@@ -78,7 +80,7 @@ int main()
 	RectangleShape test;
 	test.setFillColor(Color::Black);
 	test.setPosition(0, 0);
-	test.setSize(Vector2f(10, 10));
+	test.setSize(Vector2f(worldWidth*blockSize, worldHeight*blockSize));
 
 
 	//============================================================
@@ -88,10 +90,15 @@ int main()
 	
 
 	heroCharacter.heroSprite.setPosition(250, 250);
+	heroCharacter.heroTest.setPosition(250, 250);
 
+
+	int buffX = -1, buffY;
 
 	while (window.isOpen())
 	{
+		window.setView(visibleArea);
+		View currentView = window.getView();
 		Event event;
 		while (window.pollEvent(event))
 		{
@@ -115,10 +122,107 @@ int main()
 						isInvOpen = false;
 						break;
 					}
-					if(isInvOpen==false)
+					if (isInvOpen == false)
 					{
 						heroCharacter.openInventory(true);
 						isInvOpen = true;
+					}
+				}
+				if (event.key.code == Keyboard::Z)
+				{
+					heroCharacter.inventoryNumbersSetup("dirt", 10);
+					heroCharacter.inventoryNumbersSetup("grass", 10);
+				}
+
+
+				if (event.key.code == Keyboard::Q)
+				{
+					
+					for (int y = 0; y < 4; y++)
+					{
+						for (int x = 0; x < 5; x++)
+						{
+							cout << heroCharacter.inventoryNumbers[x][y].amount << " ";
+						}
+						cout << endl;
+					}
+
+					
+					
+				}
+			}
+
+
+			if (event.type == Event::MouseButtonPressed && isInvOpen == true)
+			{
+				if (event.key.code == Mouse::Left)
+				{
+					Vector2i pixelPos = Mouse::getPosition(window);
+					Vector2f worldPos = window.mapPixelToCoords(pixelPos);
+
+					mousePoint.setPosition(Vector2f(worldPos.x, worldPos.y));
+					
+					
+
+					for (int x = 0; x < 5; x++)
+					{
+						for (int y = 0; y < 4; y++)
+						{
+							if (heroCharacter.inventory[x][y].getGlobalBounds().intersects(mousePoint.getGlobalBounds()) == true)
+							{
+								buffX = x;
+								buffY = y;
+								//cout << heroCharacter.inventoryNumbers[x][y].type << endl;
+								cout << "Pressed: " << x << " " << y << endl;
+							}
+						}
+					}
+				}
+			}
+
+			if (event.type == Event::MouseButtonReleased && isInvOpen == true)
+			{
+				if (event.key.code == Mouse::Left)
+				{
+					Vector2i pixelPos = Mouse::getPosition(window);
+					Vector2f worldPos = window.mapPixelToCoords(pixelPos);
+
+					mousePoint.setPosition(Vector2f(worldPos.x, worldPos.y));
+					for (int x = 0; x < 5; x++)
+					{
+						for (int y = 0; y < 4; y++)
+						{
+							if (heroCharacter.inventory[x][y].getGlobalBounds().intersects(mousePoint.getGlobalBounds()) == true)
+							{
+								cout <<"Release: "<< x << " " << y << endl;
+
+								string typeBuff = heroCharacter.inventoryNumbers[x][y].type;
+								int amountBuff = heroCharacter.inventoryNumbers[x][y].amount;
+								if (buffX == x && buffY == y)
+								{
+									break;
+								}
+								if (heroCharacter.inventoryNumbers[buffX][buffY].type == heroCharacter.inventoryNumbers[buffX][buffY].type)
+								{
+									heroCharacter.inventoryNumbers[x][y].type = heroCharacter.inventoryNumbers[buffX][buffY].type;
+									heroCharacter.inventoryNumbers[x][y].amount += heroCharacter.inventoryNumbers[buffX][buffY].amount;
+
+									heroCharacter.inventoryNumbers[buffX][buffY].type = "none";
+									heroCharacter.inventoryNumbers[buffX][buffY].amount = 0;
+								}
+								else
+								{
+									heroCharacter.inventoryNumbers[x][y].type = heroCharacter.inventoryNumbers[buffX][buffY].type;
+									heroCharacter.inventoryNumbers[x][y].amount = heroCharacter.inventoryNumbers[buffX][buffY].amount;
+									heroCharacter.inventoryNumbers[buffX][buffY].type = typeBuff;
+									heroCharacter.inventoryNumbers[buffX][buffY].amount = amountBuff;
+								}
+								
+
+								heroCharacter.inventorySetup();
+
+							}
+						}
 					}
 				}
 			}
@@ -128,11 +232,12 @@ int main()
 			{
 				if (event.key.code == Mouse::Left)
 				{
-					//Vector2i mousePos = Mouse::getPosition();
-					mousePoint.setPosition(Vector2f(Mouse::getPosition(window).x, Mouse::getPosition(window).y));
+					sf::Vector2i pixelPos = sf::Mouse::getPosition(window);
+					sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
+
+					mousePoint.setPosition(Vector2f(worldPos.x, worldPos.y));
+
 					mousePoint.setFillColor(Color::Black);
-					
-					cout << Mouse::getPosition(window).x << " " << Mouse::getPosition(window).y << endl;
 
 					for (int x = 0; x < worldWidth; x++)
 					{
@@ -140,23 +245,29 @@ int main()
 						{
 							if (world.worldStructure[x][y].tileShape.getGlobalBounds().intersects(mousePoint.getGlobalBounds())==true )
 							{
-								cout << x << "," << y << endl;
 								if (abs(heroCharacter.heroSprite.getPosition().x - world.worldStructure[x][y].tileShape.getPosition().x) <= world.worldStructure[x][y].tileShape.getSize().x * 4)
 								{
 									if (abs(heroCharacter.heroSprite.getPosition().y - world.worldStructure[x][y].tileShape.getPosition().y) <= world.worldStructure[x][y].tileShape.getSize().y * 4)
 									{
-										world.worldStructure[x].erase(world.worldStructure[x].begin() + y);
+										world.deleteTile(x, y);
+										//world.worldStructure[x].erase(world.worldStructure[x].begin() + y);
 									}
 								}
 							}
-							//break;
 						}
 					}
 				}
 			}
 			//scroll
+			//=====VIEW=======================
+			
+
+			
+			//=====EO_VIEW====================
+
 			if (event.type == sf::Event::MouseWheelMoved)
 			{
+				
 				float SizeX = world.worldStructure[0][0].tileShape.getSize().x;
 				float SizeY = world.worldStructure[0][0].tileShape.getSize().y;
 
@@ -167,6 +278,9 @@ int main()
 				
 				if (event.mouseWheel.delta == 1)
 				{
+					
+					
+					
 					for (int x = 0; x < worldWidth; x++)
 					{
 						for (int y = 0; y < worldHeight; y++)
@@ -176,16 +290,12 @@ int main()
 						}
 					}
 
-					//scale = blockSize / world.worldStructure[0][0].tileShape.getSize().x;
-					//cout << "Skala: " << scale << endl;
-					//heroDistanceOrigin *= scale;
-					//cout << "Odleglosc od punktu 0,0: " << heroDistanceOrigin << endl;
-
 					heroCharacter.heroSprite.setPosition(Vector2f(PositionHeroX + 10, PositionHeroY-0.5 ));
 					heroCharacter.heroSprite.setSize(Vector2f(SizeHeroX + 0.5, SizeHeroY + 1));
 				}
 				if (event.mouseWheel.delta == -1)
 				{
+					
 					for (int x = 0; x < worldWidth; x++)
 					{
 						for (int y = 0; y < worldHeight; y++)
@@ -194,13 +304,6 @@ int main()
 							world.worldStructure[x][y].tileShape.setSize(Vector2f(SizeX - 0.5, SizeY - 0.5));
 						}
 					}
-
-
-					//scale = blockSize / world.worldStructure[0][0].tileShape.getSize().x;
-					//cout << "Skala: " << scale << endl;
-					//heroDistanceOrigin *= scale;
-					//cout << "Odleglosc od punktu 0,0: " << heroDistanceOrigin << endl;
-
 					heroCharacter.heroSprite.setPosition(Vector2f(PositionHeroX - 10, PositionHeroY+0.5));
 					heroCharacter.heroSprite.setSize(Vector2f(SizeHeroX - 0.5, SizeHeroY - 1));
 				}
@@ -211,11 +314,7 @@ int main()
 		//mouse===================================
 		
 		//eo_mouse================================
-
-		//=====VIEW=======================
-		window.setView(visibleArea);
-		View currentView = window.getView();
-
+		
 		float fovX = currentView.getCenter().x;
 		float fovY = currentView.getCenter().y;
 
@@ -223,35 +322,35 @@ int main()
 		float rightFovEdge = fovX + (g_width / 2);
 		float upFovEdge = fovY + (g_height / 2);
 		float downFovEdge = fovY - (g_height / 2);
-		//=====EO_VIEW====================
 
 
-		//heroCharacter.heroSprite.setPosition(Vector2f(leftFovEdge+g_width/2, downFovEdge+g_height/2-50));
+		heroCharacter.heroSprite.setPosition(Vector2f(leftFovEdge+g_width/2, downFovEdge+g_height/2-50));
 		
 		currentView.setCenter(heroCharacter.heroSprite.getPosition().x, heroCharacter.heroSprite.getPosition().y);
 		
+
 		if (Keyboard::isKeyPressed(Keyboard::W))
 		{
 			heroCharacter.heroMove(0);
-			//visibleArea.move(0, -5);
+			visibleArea.move(0, -5);
 		}
 		if (Keyboard::isKeyPressed(Keyboard::S))
 		{
 			heroCharacter.heroMove(3);
-			//visibleArea.move(0, 5);
+			visibleArea.move(0, 5);
 		}
 		if (Keyboard::isKeyPressed(Keyboard::D))
 		{
 			heroCharacter.heroMove(2);
-			//visibleArea.move(5, 0);
+			visibleArea.move(5, 0);
 		}
 		if (Keyboard::isKeyPressed(Keyboard::A))
 		{
 			heroCharacter.heroMove(1);
-			//visibleArea.move(-5, 0);
+			visibleArea.move(-5, 0);
 		}
 		
-
+		
 		
 		if (Keyboard::isKeyPressed(Keyboard::C))
 		{
@@ -276,7 +375,7 @@ int main()
 
 		window.clear(Color::White);
 
-
+		//window.draw(test);
 		
 
 
@@ -298,17 +397,33 @@ int main()
 			}
 		}
 
-		if (isInvOpen == true)
-		{
-			
-			heroCharacter.inventory.setPosition(Vector2f(heroCharacter.heroSprite.getPosition().x-heroCharacter.inventory.getSize().x/2, heroCharacter.heroSprite.getPosition().y - heroCharacter.inventory.getSize().y / 2));
-			window.draw(heroCharacter.inventory);
-		}
+		
 
-		//window.draw(test);
+		
 		window.draw(mousePoint);
 
 		window.draw(heroCharacter.heroSprite);
+		window.draw(heroCharacter.heroTest);
+
+		if (isInvOpen == true)
+		{
+
+			heroCharacter.inventoryShape.setPosition(Vector2f(heroCharacter.heroSprite.getPosition().x - heroCharacter.inventoryShape.getSize().x / 2, heroCharacter.heroSprite.getPosition().y - heroCharacter.inventoryShape.getSize().y / 2 + 50));
+			window.draw(heroCharacter.inventoryShape);
+
+			
+			heroCharacter.inventorySetup();
+			
+
+			for (int x = 0; x < 5; x++)
+			{
+				for (int y = 0; y < 4; y++)
+				{
+					window.draw(heroCharacter.inventory[x][y]);
+				}
+			}
+
+		}
 
 		window.display();
 	}

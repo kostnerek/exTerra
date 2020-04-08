@@ -10,12 +10,36 @@ using namespace sf;
 class hero
 {
 	
-	
+	Texture tDirt;
+	Texture tGrass;
+	Texture tOre1;
+	Texture tOre2;
+	Texture tOre3;
+	Texture tOre4;
+	Texture tStone;
+	const Texture* ptDirt = &tDirt;
+	const Texture* ptGrass = &tGrass;
+	const Texture* ptOre1 = &tOre1;
+	const Texture* ptOre2 = &tOre2;
+	const Texture* ptOre3 = &tOre3;
+	const Texture* ptOre4 = &tOre4;
+	const Texture* ptStone = &tStone;
 
 public:
+
+	class inventoryClass
+	{
+	public:
+		string type="none";
+		int amount=0;
+	};
+
 	RectangleShape heroSprite;
 
-	RectangleShape inventory;
+	RectangleShape heroTest;
+
+
+	RectangleShape inventoryShape;
 
 	Texture heroTexture;
 	Image heroImage;
@@ -23,7 +47,16 @@ public:
 	const Texture* ptHeroTexture = &heroTexture;
 
 	Texture inventoryTexture;
-	const Texture* ptInventoryTexture = &inventoryTexture;
+	const Texture* ptInventoryTexture = &inventoryTexture;//cale inventory
+
+	
+	Texture emptyTexture;
+	const Texture* ptEmptyTexture = &emptyTexture;
+
+	vector<vector<RectangleShape>>inventory;//inv
+	vector<vector<inventoryClass>>inventoryNumbers;//matematyczna czesc
+
+	Font font;
 
 
 	hero();
@@ -32,4 +65,16 @@ public:
 	void heroMove();
 
 	void openInventory(bool isInvOpen);
+
+	void inventorySetup();
+	void inventoryNumbersSetup(string type, int amount, int x, int y);
+	int inventoryNumbersSetup(string type, int amount);
+
+
+	void updateInvTextures();
+	
 };
+
+
+
+extern hero heroCharacter;
