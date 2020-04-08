@@ -214,7 +214,6 @@ void hero::heroMove()
 
 void hero::openInventory(bool isInvOpen)
 {
-	cout << isInvOpen << endl;
 
 
 }

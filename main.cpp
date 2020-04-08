@@ -130,8 +130,8 @@ int main()
 				}
 				if (event.key.code == Keyboard::Z)
 				{
-					heroCharacter.inventoryNumbersSetup("dirt", 10);
-					heroCharacter.inventoryNumbersSetup("grass", 10);
+					heroCharacter.inventoryNumbersSetup("dirt",  1);
+					heroCharacter.inventoryNumbersSetup("grass", 2);
 				}
 
 
@@ -143,6 +143,14 @@ int main()
 						for (int x = 0; x < 5; x++)
 						{
 							cout << heroCharacter.inventoryNumbers[x][y].amount << " ";
+						}
+						cout << endl;
+					}
+					for (int y = 0; y < 4; y++)
+					{
+						for (int x = 0; x < 5; x++)
+						{
+							cout << heroCharacter.inventoryNumbers[x][y].type << " ";
 						}
 						cout << endl;
 					}
@@ -173,7 +181,7 @@ int main()
 								buffX = x;
 								buffY = y;
 								//cout << heroCharacter.inventoryNumbers[x][y].type << endl;
-								cout << "Pressed: " << x << " " << y << endl;
+								//cout << "Pressed: " << x << " " << y << endl;
 							}
 						}
 					}
@@ -194,7 +202,9 @@ int main()
 						{
 							if (heroCharacter.inventory[x][y].getGlobalBounds().intersects(mousePoint.getGlobalBounds()) == true)
 							{
-								cout <<"Release: "<< x << " " << y << endl;
+								cout << "Pressed(to znika)buff: " << buffX << " " << buffY << endl;
+
+								cout <<"Release(to nie znika)x: "<< x << " " << y << endl;
 
 								string typeBuff = heroCharacter.inventoryNumbers[x][y].type;
 								int amountBuff = heroCharacter.inventoryNumbers[x][y].amount;
@@ -202,24 +212,30 @@ int main()
 								{
 									break;
 								}
-								if (heroCharacter.inventoryNumbers[buffX][buffY].type == heroCharacter.inventoryNumbers[buffX][buffY].type)
+								if (heroCharacter.inventoryNumbers[buffX][buffY].type == heroCharacter.inventoryNumbers[x][y].type)
 								{
-									heroCharacter.inventoryNumbers[x][y].type = heroCharacter.inventoryNumbers[buffX][buffY].type;
-									heroCharacter.inventoryNumbers[x][y].amount += heroCharacter.inventoryNumbers[buffX][buffY].amount;
+									int amount = heroCharacter.inventoryNumbers[x][y].amount + heroCharacter.inventoryNumbers[buffX][buffY].amount;
+					
+									heroCharacter.inventoryNumbers[x][y].amount = amount;
+									heroCharacter.inventoryNumbers[buffX][buffY].amount = 0;
 
 									heroCharacter.inventoryNumbers[buffX][buffY].type = "none";
-									heroCharacter.inventoryNumbers[buffX][buffY].amount = 0;
+									
+									heroCharacter.inventorySetup();
+									break;
 								}
-								else
+								if (heroCharacter.inventoryNumbers[buffX][buffY].type != heroCharacter.inventoryNumbers[x][y].type)
 								{
 									heroCharacter.inventoryNumbers[x][y].type = heroCharacter.inventoryNumbers[buffX][buffY].type;
 									heroCharacter.inventoryNumbers[x][y].amount = heroCharacter.inventoryNumbers[buffX][buffY].amount;
 									heroCharacter.inventoryNumbers[buffX][buffY].type = typeBuff;
 									heroCharacter.inventoryNumbers[buffX][buffY].amount = amountBuff;
+									heroCharacter.inventorySetup();
+									break;
 								}
 								
 
-								heroCharacter.inventorySetup();
+								
 
 							}
 						}
